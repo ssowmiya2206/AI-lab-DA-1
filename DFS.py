@@ -1,29 +1,21 @@
-def dfs(graph, start):
-    visited = set()
-    stack = [start]
+def dfs(graph, node, visited=None):
+    if visited is None:
+        visited = set()
+    visited.add(node)
+    print(node, end=" ")
 
-    print("DFS Traversal:", end=" ")
+    for neighbor in graph[node]:
+        if neighbor not in visited:
+            dfs(graph, neighbor, visited)
 
-    while stack:
-        node = stack.pop()
-        if node not in visited:
-            print(node, end=" ")
-            visited.add(node)
-            for neighbor in reversed(graph[node]):
-                stack.append(neighbor)
-
-
-graph = {}
-n = int(input("Enter number of nodes: "))
-
-for _ in range(n):
-    node = input("Enter node: ")
-    graph[node] = []
-
-e = int(input("Enter number of edges: "))
-for _ in range(e):
-    u, v = input("Enter edge (u v): ").split()
-    graph[u].append(v)
-
-start = input("Enter start node: ")
-dfs(graph, start)
+# Example Usage
+graph = {
+    'Build': ['Test', 'Lint'],
+    'Test': ['Package'],
+    'Lint': ['Package'],
+    'Package': ['Deploy'],
+    'Deploy': []
+}
+print("DFS Order:", end=" ")
+dfs(graph, 'Build')
+# Expected Output: DFS Order: Build Test Package Deploy Lint
